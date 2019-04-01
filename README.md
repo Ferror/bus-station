@@ -29,13 +29,13 @@ Nazwą pliku jest Kod trasy. W pliku umieszczone są: kod trasy, i lista pasaże
 numerów siedzeń:
 
 
-Symbol trasy: 15551
-Punkt startowy: Katowice
-Data: 2011-12-13
-02 Kowalski
-12 Szybki
-33 Jaworek
-43 Biały
+* Symbol trasy: 15551
+* Punkt startowy: Katowice
+* Data: 2011-12-13
+* 02 Kowalski
+* 12 Szybki
+* 33 Jaworek
+* 43 Biały
 
 Liczba rezerwacji: 4
 
