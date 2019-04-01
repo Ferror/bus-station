@@ -6,7 +6,7 @@ Napisz program, który przygotuje listy pasażerów autobusu. Pasażerowie mogą
 na różne trasy w różnych biurach i przez internet. Wszystkie rezerwacje są zapisywane w centralnym
 rejestrze. Centralny rejestr ma następującą postać:
 
-#### <Kod trasy> <punkt startowy> <Data startu rrrr-mm> <nr miejsca> <nazwisko pasażera>
+<Kod trasy> <punkt startowy> <Data startu rrrr-mm> <nr miejsca> <nazwisko pasażera>
   
   
 * 15551 Katowice 2011-12-13 Jaworek 33
