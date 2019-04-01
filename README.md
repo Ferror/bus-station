@@ -8,7 +8,10 @@ rejestrze. Centralny rejestr ma następującą postać:
 
 <kod trasy> <punkt startowy> <data startu rrrr-mm> <nr miejsca> <nazwisko pasażera>
   
-kod trasy | punkt startowy | data startu rrrr-mm | nr miejsca | nazwisko pasażera
+| kod trasy | punkt startowy | data startu rrrr-mm | nr miejsca | nazwisko pasażera |
+| --------- | -------------- | ------------------- | ---------- | ----------------- |
+| 15551 | Katowice | 2011-12-13 | Jaworek | 33 |
+
   
   
 * 15551 Katowice 2011-12-13 Jaworek 33
