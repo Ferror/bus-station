@@ -1,0 +1,59 @@
+Symbol trasy: 151
+Punkt startowy: Katowice
+Data: 2011-12-13
+01 A
+02 B
+03 C
+04 D
+05 E
+06 F
+
+Symbol trasy: 152
+Punkt startowy: Warszawa
+Data: 2011-12-13
+01 A
+02 B
+03 C
+04 D
+05 E
+06 F
+
+Symbol trasy: 153
+Punkt startowy: Poznan
+Data: 2011-12-13
+01 A
+02 B
+03 C
+04 D
+05 E
+06 F
+
+Symbol trasy: 154
+Punkt startowy: Olsztyn
+Data: 2011-12-13
+01 A
+02 B
+03 C
+04 D
+05 E
+06 F
+
+Symbol trasy: 155
+Punkt startowy: Gdynia
+Data: 2011-12-13
+01 A
+02 B
+03 C
+04 D
+05 E
+06 F
+
+Symbol trasy: 156
+Punkt startowy: Kielce
+Data: 2011-12-13
+01 A
+02 B
+03 C
+04 D
+05 E
+06 F
