@@ -1,14 +1,26 @@
 #include <stdio.h>
-#include <time.h>
+#include <stdlib.h>
 #include <string.h>
+#include <time.h>
 #include "header/temp.h"
 
-struct Ticket {
-    int connectionCode;
+struct Passenger {
+    char* name;
+    unsigned int seatNumber;
+
+    struct Passenger* next;
+};
+
+struct Bus {
+    long connectionCode;
     char* startingPoint;
     char* startingDate;
 
+    struct Bus* next;
+    struct Passenger* passengers;
 };
+
+struct Bus* busList = NULL;
 
 int main(int argc, const char* argv[]) {
     FILE* source = fopen("/Users/zbyszek/Projects/Ferror/bus-station/input.txt", "rt");
@@ -32,22 +44,31 @@ int main(int argc, const char* argv[]) {
     }
 
     struct tm result;
+    struct Bus* tmpBus = (struct Bus*) malloc(sizeof(struct Bus));
+    struct Passenger* tmpPassenger = (struct Passenger*) malloc(sizeof(struct Passenger));
+
     char* string1[255];
     char* startingPoint[255];
     char* startingDate[255];
     char* seatNumber[255];
     char* passengerName[255];
 
-    while(fscanf(source, "%s %s %s %s %s", string1, startingPoint, startingDate, seatNumber, passengerName) == 5) {
-        printf("%s %s %s %s\n", string1, startingPoint, startingDate, seatNumber, passengerName);
-        strptime(startingDate, "%Y-%m-%d", &result);
-        printf("%d\n", result.tm_year + 1900);
-    }
+    while(fscanf(source, "%s %s %s %s %s", string1, startingPoint, startingDate, passengerName, seatNumber) == 5) {
+        printf("SOURCE: %s %s %s %s %s\n", string1, startingPoint, startingDate, passengerName, seatNumber);
 
-    if (is_it_working() == 1) {
-        printf("\nIt is!\n");
-    } else {
-        printf("It isnt\n");
+        tmpPassenger->next = NULL;
+        tmpPassenger->name = passengerName;
+        tmpPassenger->seatNumber = strtol(seatNumber, (char **) NULL, 10);
+
+        tmpBus->connectionCode = strtol(string1, (char **) NULL, 10);
+        tmpBus->startingDate = startingDate;
+        tmpBus->startingPoint = startingPoint;
+        tmpBus->next = NULL;
+        tmpBus->passengers = tmpPassenger;
+        printf("STRUCT: %ld %s %s %s %x\n", tmpBus->connectionCode, tmpBus->startingPoint, tmpBus->startingDate, tmpPassenger->name, tmpPassenger->seatNumber);
+
+        //strptime(startingDate, "%Y-%m-%d", &result);
+        //printf("%d\n", result.tm_year + 1900);
     }
 
     return 0;
