@@ -23,7 +23,6 @@ struct Bus {
 
 struct Bus* busList = NULL;
 
-//Seems working
 int isBusForConnectionCode(unsigned long connectionCode)
 {
     struct Bus* tmp = busList;
@@ -39,27 +38,46 @@ int isBusForConnectionCode(unsigned long connectionCode)
     return 0;
 }
 
-//NOT WORKING
+//@todo function isBusDuplicated
+int isBusDuplicated(unsigned long connectionCode, char* city, char* date)
+{
+    struct Bus* tmp = busList;
+
+    while (tmp != NULL) {
+        if (tmp->connectionCode == connectionCode) {
+            if (strcmp(city, tmp->startingPoint) == 1) {
+                if (strcmp(date, tmp->startingDate)) {
+                    return 1;
+                }
+            }
+        }
+
+        tmp = tmp->next;
+    }
+
+    free(tmp);
+
+    return 0;
+}
+
 void addPassengerToBusBySeat(unsigned long connectionCode, char* name, unsigned long seatNumber)
 {
-    struct Bus* tmpBus = busList;
+    struct Bus* bus = busList;
 
-    while (busList != NULL && busList->connectionCode != connectionCode) {
-        busList = busList->next;
+    while (bus != NULL && bus->connectionCode != connectionCode) {
+        bus = bus->next;
     }
 
     struct Passenger* tmp = (struct Passenger*) malloc(sizeof(struct Passenger));
 
-    if (busList != NULL) {
+    if (bus != NULL) {
         tmp->name = name;
         tmp->seatNumber = seatNumber;
         tmp->next = busList->passengers;
 
-        busList->passengers = tmp;
-        busList->amountOfPassengers += 1;
+        bus->passengers = tmp;
+        bus->amountOfPassengers += 1;
     }
-
-    busList = tmpBus;
 }
 
 void printBus(unsigned long connectionCode)
@@ -87,7 +105,7 @@ void printBus(unsigned long connectionCode)
 }
 
 int main(int argc, const char* argv[]) {
-    FILE* source = fopen("/Users/zbyszek/Projects/Ferror/bus-station/test/input/in_example_lot.txt", "rt");
+    FILE* source = fopen("/Users/zbyszek/Projects/Ferror/bus-station/test/input/in_example_double.txt", "rt");
 
     if (argv[1] != NULL && strcmp(argv[1], "-i") == 0) {
         fclose(source);
@@ -110,7 +128,6 @@ int main(int argc, const char* argv[]) {
     }
 
 //    struct tm result;
-
     char* connectionCode[255];
     char* startingPoint[255];
     char* startingDate[255];
@@ -136,7 +153,6 @@ int main(int argc, const char* argv[]) {
         } else {
             printf("istnieje Bus nr: %lu\n", code);
         }
-
         //add passenger to bus BY seatNumber
         addPassengerToBusBySeat(code, strdup(passengerName), strtol(strdup(seatNumber), (char **) NULL, 10));
 
@@ -144,7 +160,6 @@ int main(int argc, const char* argv[]) {
         //RESULT
         //list to file service
         //count amount of passengers
-
 
         //strptime(startingDate, "%Y-%m-%d", &result);
         //printf("%d\n", result.tm_year + 1900);
