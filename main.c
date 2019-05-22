@@ -157,10 +157,8 @@ int main(int argc, const char* argv[]) {
         addPassengerToBusBySeat(code, strdup(passengerName), strtol(strdup(seatNumber), (char **) NULL, 10));
 
         //printf("STRUCT: %ld %s %s %s %u\n", tmpBus->connectionCode, tmpBus->startingPoint, tmpBus->startingDate, tmpPassenger->name, tmpPassenger->seatNumber);
-        //RESULT
+        //@todo generate RESULT files
         //list to file service
-        //count amount of passengers
-
         //strptime(startingDate, "%Y-%m-%d", &result);
         //printf("%d\n", result.tm_year + 1900);
     }
