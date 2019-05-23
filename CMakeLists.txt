@@ -5,6 +5,8 @@ set(CMAKE_CXX_STANDARD 14)
 
 add_executable(Clion
     main.c
-    src/temp.c
-    header/temp.h
+    src/bus.c
+    src/passenger.c
+    header/passenger.h
+    header/bus.h
 )

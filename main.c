@@ -1,32 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
-#include "header/temp.h"
+#include "header/passenger.h"
+#include "header/bus.h"
 
-struct Passenger {
-    char* name;
-    unsigned long seatNumber;
-
-    struct Passenger* next;
-};
-
-struct Bus {
-    unsigned long connectionCode;
-    unsigned long amountOfPassengers;
-    char* startingPoint;
-    char* startingDate;
-
-    struct Bus* next;
-    struct Passenger* passengers;
-};
-
-struct Bus* busList = NULL;
-
-int isBusForConnectionCode(unsigned long connectionCode)
+/**
+ * @param connectionCode
+ *
+ * @return int
+ */
+int isBusForConnectionCode(struct Bus* tmp, unsigned long connectionCode)
 {
-    struct Bus* tmp = busList;
-
     while (tmp != NULL) {
         if (tmp->connectionCode == connectionCode) {
             return 1;
@@ -38,15 +22,22 @@ int isBusForConnectionCode(unsigned long connectionCode)
     return 0;
 }
 
-//@todo function isBusDuplicated
-int isBusDuplicated(unsigned long connectionCode, char* city, char* date)
+/**
+ * @deprecated since bus has ID
+ *
+ * @param connectionCode
+ * @param city
+ * @param date
+ *
+ * @return int
+ */
+int isBusDuplicated(struct Bus* tmp, unsigned long connectionCode, char* city, char* date)
 {
-    struct Bus* tmp = busList;
-
     while (tmp != NULL) {
         if (tmp->connectionCode == connectionCode) {
-            if (strcmp(city, tmp->startingPoint) == 1) {
-                if (strcmp(date, tmp->startingDate)) {
+            //strcmp returns zero, when s1 == s2
+            if (strcmp(city, tmp->startingPoint) == 0) {
+                if (strcmp(date, tmp->startingDate) == 0) {
                     return 1;
                 }
             }
@@ -55,61 +46,111 @@ int isBusDuplicated(unsigned long connectionCode, char* city, char* date)
         tmp = tmp->next;
     }
 
-    free(tmp);
-
     return 0;
 }
 
-void addPassengerToBusBySeat(unsigned long connectionCode, char* name, unsigned long seatNumber)
+void addPassengerToBus(struct Bus* busList, unsigned long connectionCode, char* name, unsigned long seatNumber)
 {
-    struct Bus* bus = busList;
-
-    while (bus != NULL && bus->connectionCode != connectionCode) {
-        bus = bus->next;
-    }
-
-    struct Passenger* tmp = (struct Passenger*) malloc(sizeof(struct Passenger));
+    struct Bus* bus = getBusByConnectionCode(busList, connectionCode);
 
     if (bus != NULL) {
-        tmp->name = name;
-        tmp->seatNumber = seatNumber;
-        tmp->next = busList->passengers;
+        struct Passenger* tmpPassenger = bus->passengers;
+        struct Passenger* newPassenger = (struct Passenger*) malloc(sizeof(struct Passenger));
 
-        bus->passengers = tmp;
+        newPassenger->name = name;
+        newPassenger->seatNumber = seatNumber;
+        newPassenger->next = tmpPassenger;
+        bus->passengers = newPassenger;
         bus->amountOfPassengers += 1;
+
+        //printf("ADD PASSENGER: %lu - %s TO BUS: %lu\n", seatNumber, name, bus->connectionCode);
     }
 }
 
-void printBus(unsigned long connectionCode)
+/**
+ * @param connectionCode
+ */
+void printBus(struct Bus* busList, unsigned long connectionCode)
 {
-    struct Bus* tmp = busList;
+    struct Bus* bus = getBusByConnectionCode(busList, connectionCode);
 
-    while (tmp != NULL && tmp->connectionCode != connectionCode) {
-        tmp = tmp->next;
-    }
+    if (bus != NULL) {
+        printf("Symbol trasy: %lu\n", bus->connectionCode);
+        printf("Punkt startowy: %s\n", bus->startingPoint);
+        printf("Data: %s\n", bus->startingDate);
 
-    if (tmp != NULL) {
-        printf("Symbol trasy: %lu\n", tmp->connectionCode);
-        printf("Punkt startowy: %s\n", tmp->startingPoint);
-        printf("Data: %s\n", tmp->startingDate);
-
-        struct Passenger* passenger = tmp->passengers;
+        struct Passenger* passenger = bus->passengers;
 
         while (passenger != NULL) {
             printf("%lu %s\n", passenger->seatNumber, passenger->name);
             passenger = passenger->next;
         }
 
-        printf("Liczba rezerwacji: %lu\n\n", tmp->amountOfPassengers);
+        printf("Liczba rezerwacji: %lu\n\n", bus->amountOfPassengers);
     }
 }
 
-int main(int argc, const char* argv[]) {
-    FILE* source = fopen("/Users/zbyszek/Projects/Ferror/bus-station/test/input/in_example_double.txt", "rt");
+/**
+ * @param Bus* bus
+ */
+void freeData(struct Bus* bus)
+{
+    while (bus != NULL) {
+        struct Bus* currentBus = bus;
+        struct Passenger* nextPassenger = currentBus->passengers;
 
+        while (nextPassenger != NULL) {
+            struct Passenger* currentPassenger = nextPassenger;
+
+            nextPassenger = currentPassenger->next;
+            free(currentPassenger);
+        }
+
+        bus = currentBus->next;
+        free(currentBus);
+    }
+
+    free(bus);
+}
+
+/**
+ * @param Bus* bus
+ */
+void generateResult(struct Bus* bus)
+{
+    while (bus != NULL) {
+        char name[200];
+        //Create file name from bus connection code
+        sprintf(name, "/Users/zbyszek/Projects/Ferror/bus-station/test/output/%lu.txt", bus->connectionCode);
+        FILE* file = fopen(name, "wt");
+
+        //Save header
+        fprintf(file, "Symbol trasy: %lu\n", bus->connectionCode);
+        fprintf(file, "Punkt startowy: %s\n", bus->startingPoint);
+        fprintf(file, "Data: %s\n", bus->startingDate);
+
+        //Save passengers
+        struct Passenger* passenger = sortList(bus->passengers);
+
+        while (passenger != NULL) {
+            fprintf(file, "%lu %s\n", passenger->seatNumber, passenger->name);
+            passenger = passenger->next;
+        }
+
+        fprintf(file, "Liczba rezerwacji: %lu\n", bus->amountOfPassengers);
+        fclose(file);
+        bus = bus->next;
+    }
+}
+
+/**
+ * @param char* argv
+ *
+ * @return FILE*
+ */
+FILE* loadSourceFile(const char* argv[])
+{
     if (argv[1] != NULL && strcmp(argv[1], "-i") == 0) {
-        fclose(source);
-
         if (argv[2] == NULL) {
             printf("Argument -i potrzebuje sciezki do pliku wejsciowego\n");
 
@@ -117,8 +158,16 @@ int main(int argc, const char* argv[]) {
         }
 
         printf("Wczytuje plik z lini polecen: %s\n", argv[2]);
-        source = fopen(argv[2], "rt");
+        return fopen(argv[2], "rt");
     }
+
+    return fopen("/Users/zbyszek/Projects/Ferror/bus-station/test/input/in_example_big.txt", "rt");
+}
+
+int main(int argc, const char* argv[])
+{
+    struct Bus* busList = NULL;
+    FILE* source = loadSourceFile(argv);
 
     if (source == NULL) {
         printf("Nie znaleziono pliku z danymi!\n");
@@ -127,7 +176,7 @@ int main(int argc, const char* argv[]) {
         return 0;
     }
 
-//    struct tm result;
+    //Temporary operational fscanf variables
     char* connectionCode[255];
     char* startingPoint[255];
     char* startingDate[255];
@@ -136,46 +185,27 @@ int main(int argc, const char* argv[]) {
 
     while(fscanf(source, "%s %s %s %s %s", connectionCode, startingPoint, startingDate, passengerName, seatNumber) == 5) {
         //printf("SOURCE: %s %s %s %s %s\n", connectionCode, startingPoint, startingDate, passengerName, seatNumber);
-
         unsigned long code = strtol(strdup(connectionCode), (char **) NULL, 10);
+        unsigned long seat = strtol(strdup(seatNumber), (char **) NULL, 10);
+        char* city = strdup(startingPoint);
+        char* date = strdup(startingDate);
+        char* name = strdup(passengerName);
 
-        if (isBusForConnectionCode(code) == 0) {
-            struct Bus* tmpBus = (struct Bus*) malloc(sizeof(struct Bus));
-            //create new bus
-            printf("Utworz nowy Bus\n");
-            tmpBus->connectionCode = code;
-            tmpBus->startingPoint = strdup(startingPoint);
-            tmpBus->startingDate = strdup(startingDate);
-            tmpBus->amountOfPassengers = 0;
-            tmpBus->passengers = NULL;
-            tmpBus->next = busList;
-            busList = tmpBus;
-        } else {
-            printf("istnieje Bus nr: %lu\n", code);
+        //when identifier is connection code
+        if (isBusForConnectionCode(busList, code) == 0) {
+            struct Bus* tmp = createBus(code, city, date);
+            //add bus to the beginning of bus list
+            tmp->next = busList;
+            busList = tmp;
         }
-        //add passenger to bus BY seatNumber
-        addPassengerToBusBySeat(code, strdup(passengerName), strtol(strdup(seatNumber), (char **) NULL, 10));
 
-        //printf("STRUCT: %ld %s %s %s %u\n", tmpBus->connectionCode, tmpBus->startingPoint, tmpBus->startingDate, tmpPassenger->name, tmpPassenger->seatNumber);
-        //@todo generate RESULT files
-        //list to file service
-        //strptime(startingDate, "%Y-%m-%d", &result);
-        //printf("%d\n", result.tm_year + 1900);
-    }
-
-    if (isBusForConnectionCode(155) == 1) {
-        printBus(155);
-    }
-
-    if (isBusForConnectionCode(156) == 1) {
-        printBus(156);
-    }
-
-    if (isBusForConnectionCode(157) == 1) {
-        printBus(157);
+        addPassengerToBus(busList, code, name, seat);
+        //printf("STRUCT: %lu %s %s %s %lu\n", code, city, date, name, seat);
     }
 
     fclose(source);
-    free(busList);
+    generateResult(busList);
+    freeData(busList);
+
     return 0;
 }
