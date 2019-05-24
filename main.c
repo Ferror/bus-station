@@ -166,7 +166,7 @@ FILE* loadSourceFile(const char* argv[])
         return fopen(argv[2], "rt");
     }
 
-    return fopen("/Users/zbyszek/Projects/Ferror/bus-station/test/input/in_exceptional.txt", "rt");
+    return fopen("/Users/zbyszek/Projects/Ferror/bus-station/test/input/in_example_big.txt", "rt");
 }
 
 int main(int argc, const char* argv[])
