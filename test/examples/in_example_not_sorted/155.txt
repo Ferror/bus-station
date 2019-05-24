@@ -1,0 +1,14 @@
+Symbol trasy: 155
+Punkt startowy: Gdynia
+Data: 2011-12-13
+1 A_name
+2 B_name
+3 C_name
+4 D_name
+5 E_name
+6 F_name
+7 G_name
+8 H_name
+9 I_name
+10 J_name
+Liczba rezerwacji: 10

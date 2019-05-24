@@ -1,0 +1,10 @@
+Symbol trasy: 0
+Punkt startowy: 02
+Data: 155
+0 Bielsko
+0 Bielsko
+5 E_name
+10 J_name
+155 09
+155 04
+Liczba rezerwacji: 6

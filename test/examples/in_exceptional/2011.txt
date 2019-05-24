@@ -1,0 +1,6 @@
+Symbol trasy: 2011
+Punkt startowy: C_name
+Data: 03
+0 155
+0 155
+Liczba rezerwacji: 2

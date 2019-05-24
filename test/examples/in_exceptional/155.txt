@@ -1,0 +1,7 @@
+Symbol trasy: 155
+Punkt startowy: Bielsko
+Data: Biala
+0 2011-12-13
+0 2011-12-13
+0 2011-12-13
+Liczba rezerwacji: 3

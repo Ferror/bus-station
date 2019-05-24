@@ -1,0 +1,5 @@
+Symbol trasy: 6
+Punkt startowy: 155
+Data: Bielsko
+2011 Biala
+Liczba rezerwacji: 1

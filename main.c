@@ -62,7 +62,6 @@ void addPassengerToBus(struct Bus* busList, unsigned long connectionCode, char* 
         newPassenger->next = tmpPassenger;
         bus->passengers = newPassenger;
         bus->amountOfPassengers += 1;
-
         //printf("ADD PASSENGER: %lu - %s TO BUS: %lu\n", seatNumber, name, bus->connectionCode);
     }
 }
@@ -91,6 +90,8 @@ void printBus(struct Bus* busList, unsigned long connectionCode)
 }
 
 /**
+ * Frees all alocated data/memory
+ *
  * @param Bus* bus
  */
 void freeData(struct Bus* bus)
@@ -114,6 +115,8 @@ void freeData(struct Bus* bus)
 }
 
 /**
+ * Generate domain specified result files, where file name is bus's connection code
+ *
  * @param Bus* bus
  */
 void generateResult(struct Bus* bus)
@@ -144,6 +147,8 @@ void generateResult(struct Bus* bus)
 }
 
 /**
+ * Handles domain required -i parameter. When -i param is not defiend, then it loads static input file
+ *
  * @param char* argv
  *
  * @return FILE*
@@ -161,7 +166,7 @@ FILE* loadSourceFile(const char* argv[])
         return fopen(argv[2], "rt");
     }
 
-    return fopen("/Users/zbyszek/Projects/Ferror/bus-station/test/input/in_example_big.txt", "rt");
+    return fopen("/Users/zbyszek/Projects/Ferror/bus-station/test/input/in_exceptional.txt", "rt");
 }
 
 int main(int argc, const char* argv[])
@@ -171,7 +176,7 @@ int main(int argc, const char* argv[])
 
     if (source == NULL) {
         printf("Nie znaleziono pliku z danymi!\n");
-        printf("Pamietaj, ze moze byc potrzebna sciezka absolutna pliku\n");
+        printf("Pamietaj, ze potrzebna jest absolutna (pelna) sciezka pliku\n");
         
         return 0;
     }
