@@ -189,13 +189,12 @@ int main(int argc, const char* argv[])
     char* passengerName[255];
 
     while(fscanf(source, "%s %s %s %s %s", connectionCode, startingPoint, startingDate, passengerName, seatNumber) == 5) {
-        //printf("SOURCE: %s %s %s %s %s\n", connectionCode, startingPoint, startingDate, passengerName, seatNumber);
         unsigned long code = strtol(strdup(connectionCode), (char **) NULL, 10);
         unsigned long seat = strtol(strdup(seatNumber), (char **) NULL, 10);
         char* city = strdup(startingPoint);
         char* date = strdup(startingDate);
         char* name = strdup(passengerName);
-
+        //printf("STRUCT: %lu %s %s %s %lu\n", code, city, date, name, seat);
         //when identifier is connection code
         if (isBusForConnectionCode(busList, code) == 0) {
             struct Bus* tmp = createBus(code, city, date);
@@ -205,12 +204,12 @@ int main(int argc, const char* argv[])
         }
 
         addPassengerToBus(busList, code, name, seat);
-        //printf("STRUCT: %lu %s %s %s %lu\n", code, city, date, name, seat);
     }
 
     fclose(source);
     generateResult(busList);
     freeData(busList);
+    printf("Success: Dane rejestru zostały przetworzone poprawnie!");
 
     return 0;
 }
