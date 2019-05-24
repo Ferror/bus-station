@@ -124,7 +124,7 @@ void generateResult(struct Bus* bus)
     while (bus != NULL) {
         char name[200];
         //Create file name from bus connection code
-        sprintf(name, "/Users/zbyszek/Projects/Ferror/bus-station/test/output/%lu.txt", bus->connectionCode);
+        sprintf(name, "%lu.txt", bus->connectionCode);
         FILE* file = fopen(name, "wt");
 
         //Save header
