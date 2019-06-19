@@ -1,6 +1,8 @@
 # bus-station
 The Bus Station project in C. Done for Polsl end of semester purpose
 
+### Score: 27/30 -> 90%
+
 
 Napisz program, który przygotuje listy pasażerów autobusu. Pasażerowie mogą rezerwować bilety
 na różne trasy w różnych biurach i przez internet. Wszystkie rezerwacje są zapisywane w centralnym
